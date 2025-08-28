@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Listings{% if cached_view %} (Cached){% endif %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .property { border: 1px solid #ddd; margin: 15px 0; padding: 15px; border-radius: 5px; }
+        .price { color: #2e7d32; font-weight: bold; font-size: 1.2em; }
+        .location { color: #666; }
+        .cache-info { background: #e3f2fd; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        .no-properties { text-align: center; color: #666; padding: 40px; }
+    </style>
+</head>
+<body>
+    <h1>Property Listings</h1>
+    
+    {% if cached_view %}
+    <div class="cache-info">
+        ✅ <strong>This page is cached for 15 minutes using Redis</strong> - Subsequent requests will be served from cache for better performance.
+    </div>
+    {% endif %}
+    
+    {% if properties %}
+        <p><strong>Total Properties:</strong> {{ properties|length }}</p>
+        
+        {% for property in properties %}
+        <div class="property">
+            <h3>{{ property.title }}</h3>
+            <p>{{ property.description }}</p>
+            <div class="price">${{ property.price }}</div>
+            <div class="location">📍 {{ property.location }}</div>
+            <small>Listed on: {{ property.created_at|date:"F d, Y g:i A" }}</small>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-properties">
+            <h2>No Properties Available</h2>
+            <p>There are currently no properties listed. Check back later!</p>
+        </div>
+    {% endif %}
+    
+    <hr>
+    <p><small>
+        <a href="/properties/">JSON API</a> | 
+        <a href="/properties/html/">HTML View</a> | 
+        <a href="/admin/">Admin Panel</a>
+    </small></p>
+</body>
+</html>
